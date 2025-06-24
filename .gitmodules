@@ -1,0 +1,3 @@
+[submodule "proton-vpn-binary-status"]
+	path = proton-vpn-binary-status
+	url = ../../rust/proton-vpn-binary-status/
