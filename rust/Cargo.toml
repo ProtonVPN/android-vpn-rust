@@ -1,0 +1,24 @@
+[package]
+name = "androidvpnrust"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+name = "androidvpnrust"
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/uniffi-bindgen.rs"
+
+[profile.release]
+strip = "debuginfo"
+lto = true
+
+[dependencies]
+# TODO: switch from submodule to Proton repository once it's publishing to the repository.
+proton-vpn-binary-status = { path = "../proton-vpn-binary-status/", features = ["uniffi"] }
+uniffi = { version = "0.29", features = ["cli"] }
+
+[build-dependencies]
+uniffi = { version = "0.29", features = ["build"] }
