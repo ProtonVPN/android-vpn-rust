@@ -36,7 +36,7 @@ class ProtonVpnBinaryStatusTests {
 
     private val statusFile = Base64.getUrlDecoder().decode("AQAAAANLAADAPw==")
     private val server = Server(
-        status = Status(index = 0u, penalty = 0.5f, cost = 0u),
+        status = Status(index = 0u, penalty = 0.5, cost = 0u),
         exitLocation = Location(lat = 0.0f, long = 0.0f),
         exitCountry = "CH",
         physicalServers = listOf(
@@ -48,13 +48,13 @@ class ProtonVpnBinaryStatusTests {
     @Test
     fun `compute_loads returns results`() {
         val newLoads = computeLoadsUniffi(userLocation, listOf(server), statusFile)
-        assertEquals(listOf(Load("", status = 3u, load = 75u, score = 2.5f)), newLoads)
+        assertEquals(listOf(Load(isEnabled = true, isVisible = true, load = 75u, score = 2.5)), newLoads)
     }
 
     @Test(expected = Exception.ServerIndexOutOfRange::class)
     fun `compute_loads throws exception for invalid input`() {
         val invalidServer = server.copy(server.status.copy(index = 100u))
         val newLoads = computeLoadsUniffi(userLocation, listOf(invalidServer), statusFile)
-        assertEquals(listOf(Load("", status = 3u, load = 75u, score = 2.5f)), newLoads)
+        assertEquals(listOf(Load(isEnabled = true, isVisible = true, load = 75u, score = 2.5)), newLoads)
     }
 }
