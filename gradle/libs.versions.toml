@@ -10,3 +10,4 @@ jna = { group = "net.java.dev.jna", name = "jna", version.ref = "jna" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 rustandroid = { id = "org.mozilla.rust-android-gradle.rust-android", version = "0.9.6" }
+vanniktech-mavenpublish = { id = "com.vanniktech.maven.publish", version = "0.33.0" }
