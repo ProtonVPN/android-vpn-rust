@@ -21,7 +21,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.rustandroid)
+    alias(libs.plugins.vanniktech.mavenpublish)
 }
+
+// Update this once we publish this project to GitHub.
+private val githubRepo = "github.com/ProtonVPN/android-app"
 
 android {
     namespace = "me.proton.vpn.androidvpnrust"
@@ -29,6 +33,9 @@ android {
     ndkVersion = "28.1.13356709"
 
     defaultConfig {
+        aarMetadata {
+            minCompileSdk = 35 // Lower will probably also work.
+        }
         minSdk = 25
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -58,6 +65,39 @@ android {
             // It would be better to add it to Java resources for the "test" source set, but I can't get it to work.
             val path = "rustJniLibs/desktop/${getHostTargetForRust()}"
             it.systemProperty("jna.library.path", layout.buildDirectory.file(path).get().asFile.path)
+        }
+    }
+
+    mavenPublishing {
+        publishToMavenCentral(automaticRelease = true)
+        signAllPublications()
+
+        val groupId = "me.proton.vpn"
+        val artifactId = "android-vpn-rust"
+
+        coordinates(groupId, artifactId, getFullVersionName())
+        pom {
+            name = "$groupId:$artifactId"
+            description = "Rust library with code for Android Proton VPN client"
+            url = "https://protonvpn.com"
+            licenses {
+                license {
+                    name = "GNU GENERAL PUBLIC LICENSE, Version 3.0"
+                    url = "https://www.gnu.org/licenses/gpl-3.0.en.html"
+                }
+            }
+            developers {
+                developer {
+                    id = "opensource@proton.me"
+                    name = "Open Source Proton"
+                    email = "opensource@proton.me"
+                }
+            }
+            scm {
+                connection = "scm:git:git://${githubRepo}.git"
+                developerConnection = "scm:git:ssh://${githubRepo}.git"
+                url = "https://${githubRepo}"
+            }
         }
     }
 }
@@ -112,4 +152,34 @@ private fun getHostTargetForRust(): String? {
         os.isLinux -> "linux-x86-64"
         else -> null
     }
+}
+
+private fun getFullVersionName(): String {
+    // Find last tag in the form M.m.D, D is optional. Add number of commits from that tag to D to form final
+    // version name
+    val tag = exec("git", "tag", "--merged", "HEAD").trim().split("\n").reversed().find { it.matches(Regex("\\d+(\\.\\d+){1,2}")) }
+    if (tag == null) throw GradleScriptException("Unable to obtain version tag", NullPointerException())
+
+    val tagSplit = tag.split(".").map { it.toInt() }
+    val (major, minor) = tagSplit
+    var dev = tagSplit.getOrElse(2) { 0 }
+    dev += exec("bash", "-c", "git log --first-parent ${tag}..HEAD --oneline | wc -l").trim().toInt()
+    return "${major}.${minor}.${dev}"
+}
+
+private fun exec(vararg cmd: String): String =
+    // Exec doesn't return null with throwOnError.
+    exec(*cmd, throwOnError = true)!!
+
+private fun exec(vararg cmd: String, throwOnError: Boolean): String? {
+    val proc = providers.exec {
+        commandLine = cmd.toList()
+    }
+    if (proc.result.get().exitValue != 0) {
+        if (throwOnError)
+            throw GradleScriptException("Error executing: ${cmd}", RuntimeException(proc.standardError.asText.get()))
+        else
+            return null
+    }
+    return proc.standardOutput.asText.get()
 }
