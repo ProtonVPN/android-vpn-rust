@@ -25,36 +25,44 @@ import uniffi.proton_vpn_binary_status.Exception
 import uniffi.proton_vpn_binary_status.Load
 import uniffi.proton_vpn_binary_status.Location
 import uniffi.proton_vpn_binary_status.PhysicalServer
-import uniffi.proton_vpn_binary_status.Server
-import uniffi.proton_vpn_binary_status.Status
-import uniffi.proton_vpn_binary_status.UserLocation
+import uniffi.proton_vpn_binary_status.Logical
+import uniffi.proton_vpn_binary_status.StatusReference
 import uniffi.proton_vpn_binary_status.computeLoadsUniffi
 import java.util.Base64
 
 
 class ProtonVpnBinaryStatusTests {
 
+    private val dummyLocation = Location(0f, 0f)
     private val statusFile = Base64.getUrlDecoder().decode("AQAAAANLAADAPw==")
-    private val server = Server(
-        status = Status(index = 0u, penalty = 0.5, cost = 0u),
-        exitLocation = Location(lat = 0.0f, long = 0.0f),
+    private val server = Logical(
+        statusReference = StatusReference(index = 0u, penalty = 0.5, cost = 0u),
+        exitLocation = dummyLocation,
         exitCountry = "CH",
+        features = 4u,
         physicalServers = listOf(
-            PhysicalServer()
+            PhysicalServer(lat = 0f, long = 0f)
         )
     )
-    private val userLocation = UserLocation(Location(lat = 0.0f, long = 0.0f), country = "DE")
 
     @Test
     fun `compute_loads returns results`() {
-        val newLoads = computeLoadsUniffi(userLocation, listOf(server), statusFile)
+        val newLoads = computeLoadsUniffi(listOf(server), statusFile, dummyLocation, "DE")
         assertEquals(listOf(Load(isEnabled = true, isVisible = true, load = 75u, score = 2.5)), newLoads)
     }
 
-    @Test(expected = Exception.ServerIndexOutOfRange::class)
+    @Test(expected = Exception.ParserException::class)
     fun `compute_loads throws exception for invalid input`() {
-        val invalidServer = server.copy(server.status.copy(index = 100u))
-        val newLoads = computeLoadsUniffi(userLocation, listOf(invalidServer), statusFile)
-        assertEquals(listOf(Load(isEnabled = true, isVisible = true, load = 75u, score = 2.5)), newLoads)
+        val invalidStatusFile = byteArrayOf(1, 0) // Too short.
+        computeLoadsUniffi(listOf(server), invalidStatusFile, dummyLocation, "DE")
+    }
+
+    @Test
+    fun `compute_loads returns hidden state for unknown servers`() {
+        val unknownServer = server.copy(server.statusReference.copy(index = 100u))
+        val newLoads = computeLoadsUniffi(listOf(unknownServer), statusFile, dummyLocation, "DE")
+        // Check only isVisible and isEnabled, other values are the result of the scoring algorithm.
+        assertEquals(listOf(false), newLoads.map { it.isVisible })
+        assertEquals(listOf(false), newLoads.map { it.isEnabled })
     }
 }
