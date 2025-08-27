@@ -163,7 +163,7 @@ private fun getFullVersionName(): String {
     val tagSplit = tag.split(".").map { it.toInt() }
     val (major, minor) = tagSplit
     var dev = tagSplit.getOrElse(2) { 0 }
-    dev += exec("bash", "-c", "git log --first-parent ${tag}..HEAD --oneline | wc -l").trim().toInt()
+    dev += exec("git", "log", "--first-parent", "${tag}..HEAD", "--oneline").lineSequence().count()
     return "${major}.${minor}.${dev}"
 }
 
@@ -177,7 +177,7 @@ private fun exec(vararg cmd: String, throwOnError: Boolean): String? {
     }
     if (proc.result.get().exitValue != 0) {
         if (throwOnError)
-            throw GradleScriptException("Error executing: ${cmd}", RuntimeException(proc.standardError.asText.get()))
+            throw GradleScriptException("Error executing: ${cmd.toString()}", RuntimeException(proc.standardError.asText.get()))
         else
             return null
     }
