@@ -24,7 +24,6 @@ import org.junit.Test
 import uniffi.proton_vpn_binary_status.Exception
 import uniffi.proton_vpn_binary_status.Load
 import uniffi.proton_vpn_binary_status.Location
-import uniffi.proton_vpn_binary_status.PhysicalServer
 import uniffi.proton_vpn_binary_status.Logical
 import uniffi.proton_vpn_binary_status.StatusReference
 import uniffi.proton_vpn_binary_status.computeLoadsUniffi
@@ -38,11 +37,9 @@ class ProtonVpnBinaryStatusTests {
     private val server = Logical(
         statusReference = StatusReference(index = 0u, penalty = 0.5, cost = 0u),
         exitLocation = dummyLocation,
+        entryLocation = dummyLocation,
         exitCountry = "CH",
         features = 4u,
-        physicalServers = listOf(
-            PhysicalServer(lat = 0f, long = 0f)
-        )
     )
 
     @Test
