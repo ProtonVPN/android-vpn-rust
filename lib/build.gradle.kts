@@ -150,6 +150,7 @@ private fun getHostTargetForRust(): String? {
     return when {
         os.isWindows -> "win32-x86-64-gnu"
         os.isLinux -> "linux-x86-64"
+        os.isMacOsX -> "darwin-aarch64"
         else -> null
     }
 }
