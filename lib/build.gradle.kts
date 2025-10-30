@@ -18,14 +18,17 @@
  */
 
 plugins {
+    alias(libs.plugins.rustandroid)
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.rustandroid)
     alias(libs.plugins.vanniktech.mavenpublish)
 }
 
 // Update this once we publish this project to GitHub.
 private val githubRepo = "github.com/ProtonVPN/android-app"
+private val rustCrateName = "androidvpnrust"
+private val rustCratePath = "../rust"
+private val generatedUniffiDirectory = layout.buildDirectory.file("generated/uniffi/java")
 
 android {
     namespace = "me.proton.vpn.androidvpnrust"
@@ -44,6 +47,9 @@ android {
         release {
             isMinifyEnabled = false // Let's leave it to library users to minify and optimize.
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        debug {
+            packaging.jniLibs.keepDebugSymbols.add("**/*.so")
         }
     }
     compileOptions {
@@ -103,6 +109,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.annotation)
     implementation(libs.jna) {
         artifact { type = "aar" }
     }
@@ -113,9 +120,7 @@ dependencies {
     }
 }
 
-val rustCrateName = "androidvpnrust"
-val rustCratePath = "../rust"
-val generatedUniffiDirectory = layout.buildDirectory.file("generated/uniffi/java")
+val rustProfile = "release"
 cargo {
     module = rustCratePath
     libname = rustCrateName
@@ -126,13 +131,25 @@ cargo {
     }
     prebuiltToolchains = true
     apiLevel = 25
-    profile = "release"
+    profile = rustProfile
+    features {
+        if (findProperty("include_protun") == "true")
+            defaultAnd(arrayOf("protun"))
+    }
 }
 
 val generateUniFFIBindingsTask = tasks.register<Exec>("generateUniFFIBindings") {
     dependsOn += "cargoBuild"
     workingDir = file(rustCratePath)
-    commandLine = listOf("cargo", "run", "--release", "--bin", "uniffi-bindgen", "generate", "--library", "target/aarch64-linux-android/release/lib${rustCrateName}.so", "--language", "kotlin", "--config", "$rustCratePath/uniffi.toml", "--out-dir", generatedUniffiDirectory.get().asFile.path)
+    commandLine = listOf("cargo", "run", "--bin", "uniffi-bindgen", "generate", "--library", "target/aarch64-linux-android/$rustProfile/lib${rustCrateName}.so", "--language", "kotlin", "--config", "$rustCratePath/uniffi.toml", "--out-dir", generatedUniffiDirectory.get().asFile.path)
+}
+
+// Ensure that the Rust library is built before merging JNI libs into the AAR.
+// issue: https://github.com/mozilla/rust-android-gradle/issues/85
+tasks.whenTaskAdded {
+    if (name == "mergeDebugJniLibFolders" || name == "mergeReleaseJniLibFolders") {
+        dependsOn("cargoBuild")
+    }
 }
 
 tasks.clean {

@@ -3,5 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/proton-vpn-binary-status" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/protun" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/protun/libpvpnclient" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/protun/local-agent-rs" vcs="Git" />
   </component>
 </project>
