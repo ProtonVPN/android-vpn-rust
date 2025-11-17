@@ -20,9 +20,9 @@
 package com.protonvpn.android_vpn_rust
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import uniffi.proton_vpn_binary_status.Exception
-import uniffi.proton_vpn_binary_status.Load
 import uniffi.proton_vpn_binary_status.Location
 import uniffi.proton_vpn_binary_status.Logical
 import uniffi.proton_vpn_binary_status.StatusReference
@@ -33,19 +33,23 @@ import java.util.Base64
 class ProtonVpnBinaryStatusTests {
 
     private val dummyLocation = Location(0f, 0f)
-    private val statusFile = Base64.getUrlDecoder().decode("AQAAAANLAADAPw==")
+    private val statusFile = Base64.getUrlDecoder().decode("AQAAAANLAAAAPw==")
     private val server = Logical(
         statusReference = StatusReference(index = 0u, penalty = 0.5, cost = 0u),
         exitLocation = dummyLocation,
         entryLocation = dummyLocation,
         exitCountry = "CH",
-        features = 4u,
     )
 
     @Test
     fun `compute_loads returns results`() {
         val newLoads = computeLoadsUniffi(listOf(server), statusFile, dummyLocation, "DE")
-        assertEquals(listOf(Load(isEnabled = true, isVisible = true, load = 75u, score = 2.5)), newLoads)
+        assertEquals(1, newLoads.size)
+        val load = newLoads.first()
+        assertTrue(load.isEnabled)
+        assertTrue(load.isVisible)
+        assertEquals(75, load.load.toInt())
+        assertEquals(2.0, load.score, 0.1)
     }
 
     @Test(expected = Exception.ParserException::class)
