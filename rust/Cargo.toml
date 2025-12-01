@@ -16,8 +16,7 @@ strip = "debuginfo"
 lto = true
 
 [dependencies]
-# TODO: switch from submodule to Proton repository once it's publishing to the repository.
-proton-vpn-binary-status = { path = "../proton-vpn-binary-status/", features = ["uniffi"] }
+proton-vpn-binary-status = { registry = "proton-public", version = "1.0.0", features = ["uniffi"] }
 uniffi = { version = "0.29", features = ["cli"] }
 
 [build-dependencies]
