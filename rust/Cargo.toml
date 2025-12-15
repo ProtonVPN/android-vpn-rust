@@ -16,7 +16,7 @@ strip = "debuginfo"
 lto = true
 
 [dependencies]
-proton-vpn-binary-status = { registry = "proton-public", version = "1.0.0", features = ["uniffi"] }
+proton-vpn-binary-status = { registry = "proton-public", version = "3.0.0", features = ["uniffi"] }
 protun = { path = "../protun/", features = ["uniffi", "android"], optional = true }
 uniffi = { version = "0.29", features = ["cli"] }
 

@@ -987,9 +987,9 @@ dependencies = [
 
 [[package]]
 name = "proton-vpn-binary-status"
-version = "1.0.0"
+version = "3.0.0"
 source = "sparse+https://rust-registry.proton.me/index/"
-checksum = "c3d35f47f699bcca2b8610b2ecfa85c9298cebc2cf68a7b5b05dd89625cc9ffe"
+checksum = "19911a700fda644a80babfdd972e42ead99dd690b2251f069df64eb4d5b2686c"
 dependencies = [
  "getrandom 0.3.4",
  "log",
