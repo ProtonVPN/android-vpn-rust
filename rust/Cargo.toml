@@ -12,8 +12,12 @@ name = "uniffi-bindgen"
 path = "src/uniffi-bindgen.rs"
 
 [profile.release]
+panic = "abort"
 strip = "debuginfo"
 lto = true
+
+[profile.dev]
+panic = "abort"
 
 [dependencies]
 proton-vpn-binary-status = { registry = "proton-public", version = "3.0.0", features = ["uniffi"] }
