@@ -29,6 +29,7 @@ private val githubRepo = "github.com/ProtonVPN/android-app"
 private val rustCrateName = "androidvpnrust"
 private val rustCratePath = "../rust"
 private val generatedUniffiDirectory = layout.buildDirectory.file("generated/uniffi/java")
+private val versionName = ext["libVersionName"] as String
 
 android {
     namespace = "me.proton.vpn.androidvpnrust"
@@ -52,12 +53,14 @@ android {
             packaging.jniLibs.keepDebugSymbols.add("**/*.so")
         }
     }
+    // Java 11 is used because of dokka issue with publishing with Java 17:
+    // https://github.com/Kotlin/dokka/issues/2956
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "11"
     }
     sourceSets {
         getByName("main") {
@@ -81,7 +84,7 @@ android {
         val groupId = "me.proton.vpn"
         val artifactId = "android-vpn-rust"
 
-        coordinates(groupId, artifactId, getFullVersionName())
+        coordinates(groupId, artifactId, versionName)
         pom {
             name = "$groupId:$artifactId"
             description = "Rust library with code for Android Proton VPN client"
@@ -170,34 +173,4 @@ private fun getHostTargetForRust(): String? {
         os.isMacOsX -> "darwin-aarch64"
         else -> null
     }
-}
-
-private fun getFullVersionName(): String {
-    // Find last tag in the form M.m.D, D is optional. Add number of commits from that tag to D to form final
-    // version name
-    val tag = exec("git", "tag", "--merged", "HEAD").trim().split("\n").reversed().find { it.matches(Regex("\\d+(\\.\\d+){1,2}")) }
-    if (tag == null) throw GradleScriptException("Unable to obtain version tag", NullPointerException())
-
-    val tagSplit = tag.split(".").map { it.toInt() }
-    val (major, minor) = tagSplit
-    var dev = tagSplit.getOrElse(2) { 0 }
-    dev += exec("git", "log", "--first-parent", "${tag}..HEAD", "--oneline").lineSequence().count()
-    return "${major}.${minor}.${dev}"
-}
-
-private fun exec(vararg cmd: String): String =
-    // Exec doesn't return null with throwOnError.
-    exec(*cmd, throwOnError = true)!!
-
-private fun exec(vararg cmd: String, throwOnError: Boolean): String? {
-    val proc = providers.exec {
-        commandLine = cmd.toList()
-    }
-    if (proc.result.get().exitValue != 0) {
-        if (throwOnError)
-            throw GradleScriptException("Error executing: ${cmd.toString()}", RuntimeException(proc.standardError.asText.get()))
-        else
-            return null
-    }
-    return proc.standardOutput.asText.get()
 }
