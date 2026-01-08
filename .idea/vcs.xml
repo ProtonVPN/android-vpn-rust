@@ -2,9 +2,10 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/proton-vpn-binary-status" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/protun" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/protun/libpvpnclient" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/protun/local-agent-rs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/protun/local-agent-rs/ci-libraries-rust" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/protun/local-agent-rs/python-proton-vpn-local-agent/scripts/devtools" vcs="Git" />
   </component>
 </project>

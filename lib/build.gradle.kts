@@ -17,6 +17,9 @@
  * along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+
 plugins {
     alias(libs.plugins.rustandroid)
     alias(libs.plugins.android.library)
@@ -64,16 +67,23 @@ android {
     }
     sourceSets {
         getByName("main") {
-            jniLibs.srcDir("jniLibs")
-            // Java/Kotlin sources are added via registerJavaGeneratingTask below.
+            // Note: JNI libraries for desktop platforms (for unit testing) are being added
+            // after the AAR has been built, see below.
+            jniLibs.srcDir("rustJniLibs")
+
+            // Note: Java/Kotlin sources are added via registerJavaGeneratingTask below.
         }
     }
     testOptions {
         unitTests.all { it ->
             // Add path to the native library.
-            // It would be better to add it to Java resources for the "test" source set, but I can't get it to work.
+            // It would be better to add it to Java resources for the "test" source set, but AGP
+            // filters out .so files from Java resources.
             val path = "rustJniLibs/desktop/${getHostTargetForRust()}"
-            it.systemProperty("jna.library.path", layout.buildDirectory.file(path).get().asFile.path)
+            it.systemProperty(
+                "jna.library.path",
+                layout.buildDirectory.file(path).get().asFile.path
+            )
         }
     }
 
@@ -129,7 +139,8 @@ cargo {
     libname = rustCrateName
     targets = buildList {
         addAll(listOf("arm", "arm64", "x86", "x86_64"))
-        // Host target is needed for running unit tests.
+
+        // Host target is needed for running unit tests locally.
         getHostTargetForRust()?.let { add(it) }
     }
     prebuiltToolchains = true
@@ -152,6 +163,83 @@ val generateUniFFIBindingsTask = tasks.register<Exec>("generateUniFFIBindings") 
 tasks.whenTaskAdded {
     if (name == "mergeDebugJniLibFolders" || name == "mergeReleaseJniLibFolders") {
         dependsOn("cargoBuild")
+    }
+}
+
+fun zipDirectory(sourceDir: File, zipFile: File, excludeDirs: Set<String> = emptySet()) {
+    ZipOutputStream(zipFile.outputStream().buffered()).use { zos ->
+        sourceDir.walkTopDown()
+            .filter { it.isFile }
+            .filter { file -> excludeDirs.none { file.path.contains("/$it/") } }
+            .forEach { file ->
+                val entryName = file.relativeTo(sourceDir).path
+                zos.putNextEntry(ZipEntry(entryName))
+                file.inputStream().buffered().use { it.copyTo(zos) }
+                zos.closeEntry()
+            }
+    }
+}
+
+// Inject desktop native libraries directly into the classes JAR to allow running unit tests by the
+// users of the library.
+// AGP filters .so files from resources in MergeJavaResourceDelegate, so we add them after the JAR
+// is created.
+val desktopLibsDir = layout.buildDirectory.dir("rustJniLibs/desktop")
+afterEvaluate {
+    listOf("Release", "Debug").forEach { variant ->
+        tasks.findByName("bundle${variant}Aar")?.doLast {
+            val aarFile = outputs.files.singleFile
+            val libsDir = desktopLibsDir.get().asFile
+
+            if (!libsDir.exists()) {
+                logger.warn("Desktop libs dir not found: $libsDir")
+                return@doLast
+            }
+
+            val nativeLibs = libsDir.walkTopDown().filter {
+                it.isFile && it.extension in listOf("so", "dylib", "dll")
+            }.toList()
+
+            if (nativeLibs.isEmpty()) {
+                logger.warn("No desktop native libs to inject")
+                return@doLast
+            }
+
+            val tempDir = temporaryDir.resolve("aar-repack")
+            tempDir.deleteRecursively()
+            tempDir.mkdirs()
+
+            // Extract AAR
+            copy {
+                from(zipTree(aarFile))
+                into(tempDir)
+            }
+
+            // Extract classes.jar
+            val classesJar = tempDir.resolve("classes.jar")
+            val classesContent = tempDir.resolve("classes-content")
+            copy {
+                from(zipTree(classesJar))
+                into(classesContent)
+            }
+
+            // Copy desktop native libs
+            copy {
+                from(libsDir)
+                into(classesContent)
+                include("**/*.so", "**/*.dylib", "**/*.dll")
+            }
+
+            // Repackage classes.jar
+            classesJar.delete()
+            zipDirectory(classesContent, classesJar)
+
+            // Repackage AAR
+            aarFile.delete()
+            zipDirectory(tempDir, aarFile, excludeDirs = setOf("classes-content"))
+
+            logger.lifecycle("Injected ${nativeLibs.size} desktop native lib(s) into ${aarFile.name}")
+        }
     }
 }
 
