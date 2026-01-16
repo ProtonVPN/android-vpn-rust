@@ -155,7 +155,7 @@ cargo {
 val generateUniFFIBindingsTask = tasks.register<Exec>("generateUniFFIBindings") {
     dependsOn += "cargoBuild"
     workingDir = file(rustCratePath)
-    commandLine = listOf("cargo", "run", "--bin", "uniffi-bindgen", "generate", "--library", "target/aarch64-linux-android/$rustProfile/lib${rustCrateName}.so", "--language", "kotlin", "--config", "$rustCratePath/uniffi.toml", "--out-dir", generatedUniffiDirectory.get().asFile.path)
+    commandLine = listOf("cargo", "run", "--bin", "uniffi-bindgen", "generate", "--library", "target/aarch64-linux-android/$rustProfile/lib${rustCrateName}.so", "--language", "kotlin", "--config", "uniffi.toml", "--out-dir", generatedUniffiDirectory.get().asFile.path)
 }
 
 // Ensure that the Rust library is built before merging JNI libs into the AAR.
