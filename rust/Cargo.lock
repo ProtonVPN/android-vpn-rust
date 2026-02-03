@@ -1211,7 +1211,7 @@ dependencies = [
 
 [[package]]
 name = "pvpnclient"
-version = "0.3.5"
+version = "0.3.7"
 dependencies = [
  "base64",
  "derive_more 2.0.1",
