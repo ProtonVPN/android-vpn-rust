@@ -134,14 +134,20 @@ dependencies {
 }
 
 val rustProfile = "release"
+val hostOnly = project.hasProperty("hostOnly") ||
+    gradle.startParameter.taskNames.any { it.contains("UnitTest", ignoreCase = true) }
 cargo {
     module = rustCratePath
     libname = rustCrateName
     targets = buildList {
-        addAll(listOf("arm", "arm64", "x86", "x86_64"))
-
-        // Host target is needed for running unit tests locally.
-        getHostTargetForRust()?.let { add(it) }
+        if (hostOnly) {
+            // Build only for the host platform, which is useful for development and testing on desktop.
+            getHostTargetForRust()?.let { add(it) }
+                ?: throw GradleException("Could not determine host target")
+        } else {
+            addAll(listOf("arm", "arm64", "x86", "x86_64"))
+            getHostTargetForRust()?.let { add(it) }
+        }
     }
     prebuiltToolchains = true
     apiLevel = 25
@@ -152,10 +158,11 @@ cargo {
     }
 }
 
+val targetProfileDir = if (hostOnly) rustProfile else "aarch64-linux-android/$rustProfile"
 val generateUniFFIBindingsTask = tasks.register<Exec>("generateUniFFIBindings") {
     dependsOn += "cargoBuild"
     workingDir = file(rustCratePath)
-    commandLine = listOf("cargo", "run", "--bin", "uniffi-bindgen", "generate", "--library", "target/aarch64-linux-android/$rustProfile/lib${rustCrateName}.so", "--language", "kotlin", "--config", "uniffi.toml", "--out-dir", generatedUniffiDirectory.get().asFile.path)
+    commandLine = listOf("cargo", "run", "--bin", "uniffi-bindgen", "generate", "--library", "target/$targetProfileDir/lib${rustCrateName}.so", "--language", "kotlin", "--config", "uniffi.toml", "--out-dir", generatedUniffiDirectory.get().asFile.path)
 }
 
 // Ensure that the Rust library is built before merging JNI libs into the AAR.
