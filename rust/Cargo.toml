@@ -22,10 +22,11 @@ panic = "abort"
 [dependencies]
 proton-vpn-binary-status = { registry = "proton-public", version = "3.0.0", features = ["uniffi"] }
 protun = { path = "../protun/", features = ["uniffi", "android"], optional = true }
-uniffi = { version = "0.31.0", features = ["cli"] }
+# TODO: uniffi must be aligned with one from protun - to be investigated
+uniffi = { version = "0.29.5", features = ["cli"] }
 
 [build-dependencies]
-uniffi = { version = "0.31.0", features = ["build"] }
+uniffi = { version = "0.29.5", features = ["build"] }
 
 [features]
 protun = ["dep:protun"]
