@@ -11,7 +11,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/lib" />
-            <option value="$PROJECT_DIR$/protun/sdk-android/sdk" />
+            <option value="$PROJECT_DIR$/protun/vpn-core-android/vpn-core" />
           </set>
         </option>
       </GradleProjectSettings>

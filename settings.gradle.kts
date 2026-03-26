@@ -1,11 +1,11 @@
 val includeProtun = (providers.gradleProperty("include_protun").orNull ?: "false") == "true"
 val libVersionName = getRepoVersionName()
-// SDK version name is d.e.f-a.b.c where d.e.f is SDK version and d.e.f comes from this repo
+// VPN core version name is d.e.f-a.b.c where d.e.f is protun version and a.b.c is this repo's version.
 val protunVersionName = getRepoVersionName(file("protun")) + "-" + libVersionName
 
 gradle.allprojects {
     extensions.extraProperties["libVersionName"] = libVersionName
-    extensions.extraProperties["protunSdkVersionName"] = protunVersionName
+    extensions.extraProperties["protunCoreVersionName"] = protunVersionName
 }
 
 pluginManagement {
@@ -29,8 +29,8 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         if (includeProtun) {
-            create("sdkLibs") {
-                from(files("protun/sdk-android/gradle/libs.versions.toml"))
+            create("coreLibs") {
+                from(files("protun/vpn-core-android/gradle/libs.versions.toml"))
             }
         }
     }
@@ -39,8 +39,8 @@ dependencyResolutionManagement {
 rootProject.name = "android-vpn-rust"
 include(":lib")
 if (includeProtun) {
-    include(":protun-sdk")
-    project(":protun-sdk").projectDir = file("protun/sdk-android/sdk")
+    include(":vpn-core")
+    project(":vpn-core").projectDir = file("protun/vpn-core-android/vpn-core")
 }
 
 fun getRepoVersionName(workDir: File = file(".")): String {
