@@ -27,8 +27,7 @@ plugins {
     alias(libs.plugins.vanniktech.mavenpublish)
 }
 
-// Update this once we publish this project to GitHub.
-private val githubRepo = "github.com/ProtonVPN/android-app"
+private val githubRepo = "github.com/ProtonVPN/android-vpn-rust"
 private val rustCrateName = "androidvpnrust"
 private val rustCratePath = "../rust"
 private val generatedUniffiDirectory = layout.buildDirectory.file("generated/uniffi/java")
