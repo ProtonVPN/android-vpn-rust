@@ -1213,9 +1213,9 @@ dependencies = [
 
 [[package]]
 name = "pvpnclient"
-version = "0.3.8"
+version = "0.3.10"
 source = "sparse+https://rust.gitlab-pages.protontech.ch/shared/registry/index/"
-checksum = "0fa6e8b08624556d990022dace4016d49c790b267b4da908b8bbb9e4aeb9db46"
+checksum = "caef9cf431fbee27b9566b80576e83244b0ec0cfceb7ca1b5821cf399928cc9a"
 dependencies = [
  "base64",
  "derive_more 2.1.1",
