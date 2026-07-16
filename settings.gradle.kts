@@ -1,7 +1,7 @@
 val includeProtun = (providers.gradleProperty("include_protun").orNull ?: "false") == "true"
 val libVersionName = getRepoVersionName()
 // VPN core version name is d.e.f-a.b.c where d.e.f is protun version and a.b.c is this repo's version.
-val protunVersionName = getRepoVersionName(file("protun")) + "-" + libVersionName
+val protunVersionName = getCargoVersionName(file("protun/Cargo.toml")) + "-" + libVersionName
 
 gradle.allprojects {
     extensions.extraProperties["libVersionName"] = libVersionName
@@ -63,6 +63,27 @@ fun getRepoVersionName(workDir: File = file(".")): String {
         .count()
     return "${major}.${minor}.${dev}"
 }
+
+// Read the crate version from protun's Cargo.toml ([package] version).
+fun getCargoVersionName(cargoToml: File): String {
+    if (!cargoToml.exists()) {
+        throw RuntimeException("Unable to find crate manifest at $cargoToml")
+    }
+    val lines = cargoToml.readLines()
+    val packageStart = lines.indexOfFirst { it.trim() == "[package]" }
+    if (packageStart < 0) {
+        throw RuntimeException("No [package] section in $cargoToml")
+    }
+
+    // First `version = "..."` within the [package] table
+    val versionRegex = Regex("""^\s*version\s*=\s*"([^"]+)""")
+    for (line in lines.drop(packageStart + 1)) {
+        if (line.trimStart().startsWith("[")) break
+        versionRegex.find(line)?.let { return it.groupValues[1] }
+    }
+    throw RuntimeException("No version found in [package] of $cargoToml")
+}
+
 
 private fun exec(vararg cmd: String, workDir: File = file(".")): String {
     val proc = providers.exec {
