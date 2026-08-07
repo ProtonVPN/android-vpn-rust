@@ -14,9 +14,9 @@ dependencies = [
 
 [[package]]
 name = "android_system_properties"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "819e7219dbd41043ac279b19830f2efc897156490d7fd6ea916720117ee66311"
+checksum = "ae221649c9976a6f6c56ae1facf410f3ddb33cc661c4b7b61020a912d4237fbc"
 dependencies = [
  "libc",
 ]
@@ -319,9 +319,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.4.0"
+version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5add81bb678e6cb321aff7fa0dc7689ad82b112dbc032cea19f91d6b8e3582b9"
+checksum = "9066c49992464636f92905fa096ec58baaa4d57ec19a5c096c68d3e25ef3d136"
 dependencies = [
  "find-msvc-tools",
  "shlex",
@@ -393,9 +393,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.6.4"
+version = "4.6.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d91e0c145792ef73a6ad36d27c75ac09f1832222a3c209689d90f534685ee5b7"
+checksum = "473c7e07f409a8d772161724aa8db6a765a2532a70f9667eeb7b49d3d02fbdca"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -403,9 +403,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.6.2"
+version = "4.6.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f09628afdcc538b57f3c6341e9c8e9970f18e4a481690a64974d7023bd33548b"
+checksum = "7b48fea5a88e9ae728a2dcbedbfc0e730f7d60da42e1cb049a83c9fb8b789889"
 dependencies = [
  "anstyle",
  "clap_lex",
@@ -609,9 +609,9 @@ dependencies = [
 
 [[package]]
 name = "data-encoding"
-version = "2.11.0"
+version = "2.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4ae5f15dda3c708c0ade84bfee31ccab44a3da4f88015ed22f63732abe300c8"
+checksum = "4583a4551df46e2792f82ceeac45e850d2e2d5debba0b91f102385cda5b11f06"
 
 [[package]]
 name = "defmt"
@@ -871,9 +871,9 @@ checksum = "28dea519a9695b9977216879a3ebfddf92f1c08c05d984f8996aecd6ecdc811d"
 
 [[package]]
 name = "find-msvc-tools"
-version = "0.1.9"
+version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
+checksum = "26b73573e6edcd2af0cdf47bd6cb58f0b3839491263c314eaad1ccf24430e1de"
 
 [[package]]
 name = "fnv"
@@ -1198,9 +1198,9 @@ dependencies = [
 
 [[package]]
 name = "http"
-version = "1.4.2"
+version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6970f50e31d6fc17d3fa27329444bfa74e196cf62e95052a3f6fee181dba6425"
+checksum = "918d3568bebf352712bc2ef3d46a8bcf1a75b373be6539de198e9105cbbf9ce0"
 dependencies = [
  "bytes",
  "itoa",
@@ -1410,9 +1410,9 @@ dependencies = [
 
 [[package]]
 name = "ipnet"
-version = "2.12.0"
+version = "2.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d98f6fed1fde3f8c21bc40a1abb88dd75e67924f9cffc3ef95607bad8017f8e2"
+checksum = "6a756c3fac73139e83f14c2d742155dd2b78d3ee56597b419a0579b7bdd6dd78"
 
 [[package]]
 name = "itertools"
@@ -1828,14 +1828,14 @@ dependencies = [
 
 [[package]]
 name = "proton-os-interface"
-version = "0.2.6"
+version = "0.2.7"
 source = "sparse+https://rust-registry.proton.me/index/"
-checksum = "4c2654d02228a2e4ccb4edf1883cb2838d9640e19012f75e0cad7afcb468f2d5"
+checksum = "213218ea05202f02a22a5e41fb5bca48b6966c76f6118a7b00c3a936ac07b92c"
 dependencies = [
  "derive_more 1.0.0",
  "futures",
+ "rand 0.9.5",
  "rand_core 0.6.4",
- "rand_core 0.9.5",
  "serde",
  "thiserror 2.0.19",
 ]
@@ -1940,9 +1940,9 @@ dependencies = [
 
 [[package]]
 name = "proton-vpn-local-agent"
-version = "0.11.2"
+version = "0.12.2"
 source = "sparse+https://rust-registry.proton.me/index/"
-checksum = "055c69870879e45125b97c0693477b5b65f566a60a31775dbc4d8d85899bd9fd"
+checksum = "c70111000e0a51259dcee6765d2fb41d1955437768bd7e3c7d9a66e54fe7a6ae"
 dependencies = [
  "futures",
  "futures-rustls",
@@ -1957,9 +1957,9 @@ dependencies = [
 
 [[package]]
 name = "proton-vpn-netstack"
-version = "0.6.2"
+version = "0.6.3"
 source = "sparse+https://rust-registry.proton.me/index/"
-checksum = "7efe0aedf6b6ab847deebde5061634b0dafa0c56b5825375da62f3ce4f6958b6"
+checksum = "7707bef2e4e2d3fb1e9f2d1abf67b2ae7235be299e53bc45771f4de3c40e976b"
 dependencies = [
  "derive_more 2.1.1",
  "futures",
@@ -2023,7 +2023,7 @@ dependencies = [
 
 [[package]]
 name = "protun"
-version = "2.2.0"
+version = "2.2.1"
 dependencies = [
  "derive_more 2.1.1",
  "libc",
@@ -2056,9 +2056,9 @@ dependencies = [
 
 [[package]]
 name = "pvpnclient"
-version = "2.0.4"
+version = "3.0.1"
 source = "sparse+https://rust-registry.proton.me/index/"
-checksum = "1632b71b89c6b125995716364e38a2567c945d0a023169a1d4d30cbc3b5452b6"
+checksum = "86641ed508f00c894e5cab77af391cbe2014ccf10602c5134bb62bd35151b40d"
 dependencies = [
  "base64 0.13.1",
  "cookie_store",
@@ -2277,9 +2277,9 @@ dependencies = [
 
 [[package]]
 name = "rustls"
-version = "0.23.42"
+version = "0.23.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c54fcab019b409d04215d3a17cb438fd7fbf192ee61461f20f4fe18704bc138"
+checksum = "0283386ce02abc0151e1761d08802dfe86c173b0b494af5cbc086574e453da06"
 dependencies = [
  "log",
  "once_cell",
@@ -2747,9 +2747,9 @@ dependencies = [
 
 [[package]]
 name = "time"
-version = "0.3.54"
+version = "0.3.55"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3e1d5e639ff6bab73cb6885cc7e7b1de96c3f32c68ec55f3952614bec1092244"
+checksum = "cdb87b95ec50ddfa440816d227a17b2ccbdda963a316a727fda0fc4334f7d134"
 dependencies = [
  "deranged",
  "num-conv",
@@ -3413,18 +3413,18 @@ dependencies = [
 
 [[package]]
 name = "zerocopy"
-version = "0.8.55"
+version = "0.8.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5a105cd7b140f6eeec8acff2ea38135d3cab283ada58540f629fe51e46696eb"
+checksum = "556764e583adb45a9f8d413c2a147fa7e8d821e48e12b14fd560b607998b75eb"
 dependencies = [
  "zerocopy-derive",
 ]
 
 [[package]]
 name = "zerocopy-derive"
-version = "0.8.55"
+version = "0.8.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0fe976fb70c78cd64cccfe3a6fc142244e8a77b70959b30faf9d0ac37ee228eb"
+checksum = "f2ab42fc20575779bd240faa45f94a74256f755c0fa9e89f0ede20d91d0cdfc1"
 dependencies = [
  "proc-macro2",
  "quote",
