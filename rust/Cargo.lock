@@ -1848,15 +1848,13 @@ dependencies = [
 
 [[package]]
 name = "proton-boringtun"
-version = "3.0.2"
+version = "4.8.0"
 source = "sparse+https://rust-registry.proton.me/index/"
-checksum = "97a3fd5ba267f7ea633e4c8a53c0e2f1796997306d0904fc41819b644f0d8110"
+checksum = "0f4d8486fc345d1eaa3df6e3c2a9aa2537afb13e48fff49809c0ccfb1a7162e9"
 dependencies = [
  "aead",
- "base64 0.13.1",
  "blake2",
  "chacha20poly1305",
- "hex",
  "hmac",
  "proton-os-interface",
  "rand 0.10.3",
@@ -1867,9 +1865,9 @@ dependencies = [
 
 [[package]]
 name = "proton-os-interface"
-version = "0.3.4"
+version = "0.3.5"
 source = "sparse+https://rust-registry.proton.me/index/"
-checksum = "b96cdfbbc8cbc7269d961d5f71291f19096ebbd9b20a51db618a8204e95645d0"
+checksum = "2d072e412deeb21cb2d6f98a497989227b34fd8ac7900de85522d3cf933b16ed"
 dependencies = [
  "derive_more 1.0.0",
  "futures",
@@ -2071,7 +2069,7 @@ dependencies = [
 
 [[package]]
 name = "protun"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "derive_more 2.1.1",
  "itertools 0.15.0",
@@ -2089,9 +2087,9 @@ dependencies = [
 
 [[package]]
 name = "psl"
-version = "2.1.240"
+version = "2.1.241"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea2ee47ef40869436389d1ae67f6cb442728f74e0ba9059e1053ef6ce60e7a10"
+checksum = "c7319b480e204d67e759cad7886178335d26324c7c8573c126cc9dfa7350d064"
 dependencies = [
  "psl-types",
 ]
@@ -2114,9 +2112,9 @@ dependencies = [
 
 [[package]]
 name = "pvpnclient"
-version = "4.0.0"
+version = "4.1.0"
 source = "sparse+https://rust-registry.proton.me/index/"
-checksum = "5f1591520810ecd0cafef6f92899727f0d4efbb9919f6482a152872f91c20ef1"
+checksum = "5ed96167e712287155921c3375266caeef17ac98ba323329774914ec30b24ab8"
 dependencies = [
  "base64 0.13.1",
  "cookie_store",
@@ -2473,9 +2471,9 @@ dependencies = [
 
 [[package]]
 name = "serde_spanned"
-version = "1.1.1"
+version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6662b5879511e06e8999a8a235d848113e942c9124f211511b16466ee2995f26"
+checksum = "4e7523beb55eece201a2356bee0bbca0d1ab466c14c07703b2e0ee6d42cb0c2c"
 dependencies = [
  "serde_core",
 ]
@@ -2824,9 +2822,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-util"
-version = "0.7.19"
+version = "0.7.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "494815d09bf52b5548659851081238f0ca39ff638363907596da739561c62c52"
+checksum = "e464cf451ba96ebfc6f9b6542f17ee8b8956e33f1e40d9690624e59d7a7f8a4b"
 dependencies = [
  "bytes",
  "futures-core",
@@ -2871,18 +2869,18 @@ dependencies = [
 
 [[package]]
 name = "toml_parser"
-version = "1.1.3+spec-1.1.0"
+version = "1.1.5+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d38ac1cf9b95face32296c0a3ede1fdc270627c9d9c02a7274dd6d960dc4d56"
+checksum = "baa693a8032d7e1cada7d0041e96126df243179ff061456783ac7f12bda4744c"
 dependencies = [
  "winnow 1.0.4",
 ]
 
 [[package]]
 name = "toml_writer"
-version = "1.1.2+spec-1.1.0"
+version = "1.1.3+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d56353a2a665ad0f41a421187180aab746c8c325620617ad883a99a1cbe66d2"
+checksum = "06bdbd8cfc056b8d2e2e85f29b56a3bdbecb527cef81eb39e3e7b98af4652770"
 
 [[package]]
 name = "tracing"
@@ -3568,18 +3566,18 @@ dependencies = [
 
 [[package]]
 name = "zerocopy"
-version = "0.8.61"
+version = "0.8.62"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "879fb705ce98c32e41ebdb970fbe1204f8492423b314c6ab0354c3e7b5542866"
+checksum = "86502bf56ac7c77571a32e2647bb2a15894565e981fb2a48d7bde2d91c965a9d"
 dependencies = [
  "zerocopy-derive",
 ]
 
 [[package]]
 name = "zerocopy-derive"
-version = "0.8.61"
+version = "0.8.62"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "708882a28301d604fa039cc7727607a98d04c4b86dc76ec9cc683f805d709759"
+checksum = "5457206954b06561e2608c7e19cf58b1926586d999c246eebe4502f7e2039d1a"
 dependencies = [
  "proc-macro2",
  "quote",
