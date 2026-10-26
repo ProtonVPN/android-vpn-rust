@@ -28,4 +28,5 @@ uniffi = { version = "0.31.0", features = ["cli"] }
 uniffi = { version = "0.31.0", features = ["build"] }
 
 [features]
+default = ["protun"]
 protun = ["dep:protun"]
