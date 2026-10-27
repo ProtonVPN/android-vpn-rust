@@ -151,10 +151,6 @@ cargo {
     prebuiltToolchains = true
     apiLevel = 25
     profile = rustProfile
-    features {
-        if (findProperty("include_protun") == "true")
-            defaultAnd(arrayOf("protun"))
-    }
 }
 
 val targetProfileDir = if (hostOnly) rustProfile else "aarch64-linux-android/$rustProfile"

@@ -1,4 +1,3 @@
-val includeProtun = (providers.gradleProperty("include_protun").orNull ?: "false") == "true"
 val libVersionName = getRepoVersionName()
 // VPN core version name is d.e.f-a.b.c where d.e.f is protun version and a.b.c is this repo's version.
 val protunVersionName = getCargoVersionName(file("protun/Cargo.toml")) + "-" + libVersionName
@@ -28,20 +27,16 @@ dependencyResolutionManagement {
         mavenCentral()
     }
     versionCatalogs {
-        if (includeProtun) {
-            create("coreLibs") {
-                from(files("protun/vpn-core-android/gradle/libs.versions.toml"))
-            }
+        create("coreLibs") {
+            from(files("protun/vpn-core-android/gradle/libs.versions.toml"))
         }
     }
 }
 
 rootProject.name = "android-vpn-rust"
 include(":lib")
-if (includeProtun) {
-    include(":vpn-core")
-    project(":vpn-core").projectDir = file("protun/vpn-core-android/vpn-core")
-}
+include(":vpn-core")
+project(":vpn-core").projectDir = file("protun/vpn-core-android/vpn-core")
 
 fun getRepoVersionName(workDir: File = file(".")): String {
     // Find last tag in the form M.m.D, D is optional. Add number of commits from that tag to D to form final
